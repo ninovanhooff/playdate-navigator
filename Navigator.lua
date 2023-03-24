@@ -14,7 +14,7 @@ local activeScreen
 --- Add navigator:update() to your playdate.update() call
 
 local function popScreenImmediately()
-    printT("Popping off backstack:", activeScreen.className, activeScreen)
+    print("Popping off backstack:", activeScreen.className, activeScreen)
     table.remove(backStack)
     activeScreen:destroy()
 end
@@ -23,7 +23,7 @@ function pushScreen(newScreen)
     table.insert(
         pendingNavigators,
         function()
-            printT("Adding to backstack", newScreen.className, newScreen)
+            print("Adding to backstack", newScreen.className, newScreen)
             table.insert(backStack, newScreen)
         end
     )
@@ -37,7 +37,7 @@ function clearNavigationStack()
     table.insert(
         pendingNavigators,
         function()
-            printT("Clearing navigationStack", activeScreen.className, activeScreen)
+            print("Clearing navigationStack", activeScreen.className, activeScreen)
             while #backStack > 0 do
                 activeScreen = backStack[#backStack]
                 popScreenImmediately()
@@ -66,12 +66,12 @@ end
 --- If the backstack is empty, an Initial Screen will be inserted and an error logged
 function Navigator:resumeActiveScreen()
     if #backStack < 1 then
-        printT("ERROR: No active screen, adding initial Screen")
+        print("ERROR: No active screen, adding initial Screen")
         table.insert(backStack, self.initialScreenFunction())
     end
 
     activeScreen = backStack[#backStack]
-    printT("Resuming screen", activeScreen.className, activeScreen)
+    print("Resuming screen", activeScreen.className, activeScreen)
     playdate.setCollectsGarbage(true) -- prevent permanently disabled GC by previous Screen
     activeScreen:resume()
 end
@@ -85,7 +85,7 @@ function Navigator:executePendingNavigators()
         local newPos = lume.findIndexOf(backStack, activeScreen)
         if activeScreen and newPos and newPos ~= #backStack then
             -- the activeScreen was moved from the top of the stack to another position
-            printT("Pausing screen", activeScreen.className, activeScreen)
+            print("Pausing screen", activeScreen.className, activeScreen)
             activeScreen:pause()
         end
 
@@ -105,22 +105,22 @@ end
 
 
 function Navigator:gameWillPause()
-    printT("GameWillPause screen", activeScreen.className, activeScreen)
+    print("GameWillPause screen", activeScreen.className, activeScreen)
     activeScreen:gameWillPause()
 end
 
 function Navigator:gameWillResume()
-    printT("GameWillResume screen", activeScreen.className, activeScreen)
+    print("GameWillResume screen", activeScreen.className, activeScreen)
     activeScreen:gameWillResume()
 end
 
 function Navigator:crankDocked()
-    printT("Crank Docked for screen", activeScreen.className, activeScreen)
+    print("Crank Docked for screen", activeScreen.className, activeScreen)
     activeScreen:crankDocked()
 end
 
 function Navigator:crankUndocked()
-    printT("Crank Undocked for screen", activeScreen.className, activeScreen)
+    print("Crank Undocked for screen", activeScreen.className, activeScreen)
     activeScreen:crankUndocked()
 end
 
