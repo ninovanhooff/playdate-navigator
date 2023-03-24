@@ -46,18 +46,15 @@ function clearNavigationStack()
     )
 end
 
---- internal namespace used to hide the class from external instantiation.
-local navigatorNS <const> = {}
+class("Navigator", {}).extends()
 
-class("Navigator", {}, navigatorNS).extends()
-
-function navigatorNS.Navigator:init(initialScreenFunction)
-    navigatorNS.Navigator.super.init(self)
+function Navigator:init(initialScreenFunction)
+    Navigator.super.init(self)
 
     self.initialScreenFunction = initialScreenFunction
 end
 
-function navigatorNS.Navigator:start()
+function Navigator:start()
     if #pendingNavigators > 0 then
         self:executePendingNavigators()
     else
@@ -67,7 +64,7 @@ end
 
 --- Ensure that the backstack is non-empty and resumes the the screen at the top of the backstack
 --- If the backstack is empty, an Initial Screen will be inserted and an error logged
-function navigatorNS.Navigator:resumeActiveScreen()
+function Navigator:resumeActiveScreen()
     if #backStack < 1 then
         printT("ERROR: No active screen, adding initial Screen")
         table.insert(backStack, self.initialScreenFunction())
@@ -79,7 +76,7 @@ function navigatorNS.Navigator:resumeActiveScreen()
     activeScreen:resume()
 end
 
-function navigatorNS.Navigator:executePendingNavigators()
+function Navigator:executePendingNavigators()
     if #pendingNavigators > 0 then
         for _, navigator in ipairs(pendingNavigators) do
             navigator()
@@ -97,39 +94,36 @@ function navigatorNS.Navigator:executePendingNavigators()
     end
 end
 
-function navigatorNS.Navigator:updateActiveScreen()
+function Navigator:updateActiveScreen()
     activeScreen:update()
 end
 
-function navigatorNS.Navigator:update()
+function Navigator:update()
     self:executePendingNavigators()
     self:updateActiveScreen()
 end
 
 
-function navigatorNS.Navigator:gameWillPause()
+function Navigator:gameWillPause()
     printT("GameWillPause screen", activeScreen.className, activeScreen)
     activeScreen:gameWillPause()
 end
 
-function navigatorNS.Navigator:gameWillResume()
+function Navigator:gameWillResume()
     printT("GameWillResume screen", activeScreen.className, activeScreen)
     activeScreen:gameWillResume()
 end
 
-function navigatorNS.Navigator:crankDocked()
+function Navigator:crankDocked()
     printT("Crank Docked for screen", activeScreen.className, activeScreen)
     activeScreen:crankDocked()
 end
 
-function navigatorNS.Navigator:crankUndocked()
+function Navigator:crankUndocked()
     printT("Crank Undocked for screen", activeScreen.className, activeScreen)
     activeScreen:crankUndocked()
 end
 
-function navigatorNS.Navigator:debugDraw()
+function Navigator:debugDraw()
     activeScreen:debugDraw()
 end
-
--- return singleton
-return navigatorNS.Navigator()
