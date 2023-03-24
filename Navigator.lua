@@ -121,6 +121,17 @@ function Navigator:gameWillResume()
     activeScreen:gameWillResume()
 end
 
+function Navigator:deviceWillLock()
+    print("deviceWillLock screen", activeScreen.className, activeScreen)
+    activeScreen:deviceWillLock()
+end
+
+function Navigator:deviceDidUnlock()
+    print("deviceDidUnlock screen", activeScreen.className, activeScreen)
+    activeScreen:deviceDidUnlock()
+end
+
+
 function Navigator:crankDocked()
     print("Crank Docked for screen", activeScreen.className, activeScreen)
     activeScreen:crankDocked()

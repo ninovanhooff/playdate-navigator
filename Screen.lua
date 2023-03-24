@@ -34,6 +34,17 @@ function Screen:gameWillResume()
     -- no-op, implemented in subclasses
 end
 
+--- Called when the device is locked
+function Screen:deviceWillLock()
+    -- no-op, implemented in subclasses
+end
+
+--- Called when the device is unlocked
+function Screen:deviceDidUnlock()
+    -- no-op, implemented in subclasses
+end
+
+
 function Screen:crankDocked()
     -- no-op, implemented in subclasses
 end
