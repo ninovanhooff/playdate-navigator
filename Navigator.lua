@@ -1,4 +1,3 @@
-local lume <const> = masterplayer.lume
 local playdate <const> = playdate
 local menu <const> = playdate.getSystemMenu()
 
@@ -17,6 +16,14 @@ local function popScreenImmediately()
     print("Popping off backstack:", activeScreen.className, activeScreen)
     table.remove(backStack)
     activeScreen:destroy()
+end
+
+local function findIndexOf(t, value)
+    for i,item in ipairs(t) do
+        if item == value then return i end
+    end
+
+    return nil
 end
 
 function pushScreen(newScreen)
@@ -82,7 +89,7 @@ function Navigator:executePendingNavigators()
             navigator()
         end
         pendingNavigators = {}
-        local newPos = lume.findIndexOf(backStack, activeScreen)
+        local newPos = findIndexOf(backStack, activeScreen)
         if activeScreen and newPos and newPos ~= #backStack then
             -- the activeScreen was moved from the top of the stack to another position
             print("Pausing screen", activeScreen.className, activeScreen)
