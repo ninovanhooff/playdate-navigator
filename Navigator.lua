@@ -13,9 +13,13 @@ local activeScreen
 --- Add navigator:update() to your playdate.update() call
 
 local function popScreenImmediately()
-    print("Popping off backstack:", activeScreen.className, activeScreen)
-    table.remove(backStack)
-    activeScreen:destroy()
+    local removed = table.remove(backStack)
+    if removed then
+        print("Popping off backstack (destroy):", removed.className, removed)
+        removed:destroy()
+    else
+        print("WARN", "tried popping backstack but backstack was empty")
+    end
 end
 
 local function findIndexOf(t, value)
